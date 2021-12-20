@@ -24,11 +24,30 @@ app.get('/', (req, res) => {
 
 app.post('/register', (req,res) => {
     // 회원가입 : 회원가입할때 필요한 정보들을 client에서 가져오면 그것들을 db에 넣어준다.
-   const user = new User (req.body)
+   const user = new User (req.body)   // ! 이부분이 req.body를 User 모델에 넣은거라고 ?
    user.save((err, userInfo)=>{         //save는 mongoDB method
        if(err) return res.json({success : false, err})
        return res.status(200).json({success : true})
    })
+})
+
+app.post('/login', (req,res)=>{
+    // 요청된 email이 db에 있는지 찾는다
+    User.findOne({email: req.body.email}, (err, userInfo) => {
+    // 요청된 email이 db에 없다면
+        if(!userInfo){    
+            res.json({loginSuccess:false, message:"제공된 이메일에 해당하는 유저가 없습니다"})
+        }
+    // 요청된 email이 db에 있다면 password가 맞는 password인지 확인
+    userInfo.comparePassword(req.body.password, (err, isMatch) => {    //comparePassword 메서드는 User.js에서 생성
+    // password가 틀리다면
+       if(!isMatch)   
+           return res.json({loginSuccess:false, message:"비밀번호가 틀렸습니다"})
+     // password가 맞다면 토큰생성
+       userInfo.generateToken((err, userInfo) => { 
+    })
+})
+})
 })
 
 app.listen(port, () => {
