@@ -74,6 +74,13 @@ app.get('/api/users/auth', auth, (req, res)=> {     // 여기 auth에 middleware
     }) // userSchema에서 가져오고 싶은 key만 가져오면 됨. 여기서 req.user.어쩌고 사용가능한 이유는 auth.js의 req.token = token; req.user = user; 때문.
 })
 
+app.get('/api/users/logout', auth, (req,res)=> {
+  User.findOneAndUpdate({_id: req.user._id}, {token : ""}, (err, user)=>{  // auth에서 가져옴, token없애줌, cb
+    if(err) return res.json({success:false, err})
+    return res.status(200).send({success:true})
+  })
+})
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
