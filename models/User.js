@@ -59,9 +59,12 @@ userSchema.pre('save', function(next){
 userSchema.methods.comparePassword = function(plainPassword, cb){
     // plainPassword = 사용자가 입력한 그대로 / 암호화된비번 = db에 담겨있다 -> plainPassword를 암호화하여 db의 비번과 비교해야함
     bcrypt.compare(plainPassword, this.password, function(err, isMatch) {
-        if(err) return cb(err)    //다를때
-        cb(null, isMatch)     //같을때: cb(err가 없고, isMatch가 true)
-    })
+        if(err) {              //비번이 다를때
+            return cb(err)
+        }else{
+           return cb(null, isMatch)  //비번이 같을때: cb(err가 없고, isMatch가 true)
+        }
+    })  
 }
 
 userSchema.methods.generateToken = function(cb){
@@ -69,12 +72,27 @@ userSchema.methods.generateToken = function(cb){
     const token = jwt.sign(user._id.toHexString(), 'secretToken')     //_id는 db에 있는 항목이다
     //user._id + 'secretToken' = token
     //'secretToken'을 넣으면 user._id가 나오는 구조. 즉 이 사람이 누구인지 알 수 있음.
-    user.token = token   //생성한 token을 db의 token항목에 넣는다
-    user.save(function(err, userInformation) {    
-    //userInformation은 변수 ! 이 userInformation이 index.js로 가서 generateToken((err,userOk) => 의 userOk위치로 보내진다. 변수일 뿐. userInformation이 뭐지 userOk와 다른건가 궁금해할 필요 X (한 페이지의 한 함수 내의 변수들은 거기서 끝난다고 생각하기. 다른 페이지에서 불러와지면 그건 그 위치에 들어가는 변수일뿐, 이름 같다고 무조건 같나?하면 안됨)
-    // userInformation 변수 안에는 token을 담고 있다는게 중요
+    user.token = token   //생성한 token을 db의 token항목에 넣는다 (user.token이 이제는 토큰이다)
+    user.save(function(err, userData) {     
+    // userData는 변수 ! 이 userData가 index.js로 가서 generateToken((err,userOK) => 의 userOk위치로 보내진다. 변수일 뿐. userData가 뭐지 userOK와 다른건가 궁금해할 필요 X (한 페이지의 한 함수 내의 변수들은 거기서 끝난다고 생각하기. 다른 페이지에서 불러와지면 그건 그 위치에 들어가는 변수일뿐, 이름 같다고 무조건 같나?하면 안됨)
+    // userData 변수 안에는 token을 담고 있다는게 중요
        if(err) return cb(err)      //err가 있다면 콜백으로 err전달
-       cb(null, userInformation)   //save가 잘 되었다면 : 콜백으로 err가 없다는걸 전달하고, userInformation을 전달
+       cb(null, userData)          //save가 잘 되었다면 : 콜백으로 err가 없다는걸 전달하고, userData 전달
+    })
+}
+
+userSchema.statics.findByToken= function (token, cb) {
+    var user = this;
+
+    // decode token
+    jwt.verify(token, 'secretToken', function(err, decoded){    //decoded는 user._id 
+       // user._id 이용해 유저 찾은 다음에
+       // client에서 가져온 token과 db에 보관된 토큰이 일치하는지 확인
+       user.findOne({ "_id": decoded, "token": token }, function(err, user){
+          if(err) return cb(err)
+          cb(null, user)
+       })
+
     })
 }
 
