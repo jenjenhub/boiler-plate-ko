@@ -3,9 +3,9 @@ const app = express()
 const port = 4000
 const bodyParser = require ('body-parser')   //bodyParser로 인해서 req.body를 받을 수 있게 됨
 const cookieParser = require('cookie-parser')
-const config = require('./config/key')
+const config = require('./server/config/key')
 
-const { User }= require('./models/User')
+const { User }= require('./server/models/User')
 const { auth } = require('./middleware/auth')
 
 // application/x-www-form-urlencoded 이렇게 된 데이터를 분석해서 가져올 수 있게 해줌
