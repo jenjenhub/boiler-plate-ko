@@ -22,8 +22,10 @@ mongoose.connect(config.mongoURI,{
 
 
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
+app.get('/', (req, res) => { res.send('Hello World!')})
+
+app.get('/api/hello', (req, res) => {    //client와 응답 주고받음 (LandingPage.js)
+  res.send("안녕하세요~")
 })
 
 app.post('/api/users/register', (req,res) => {     //나중에는 user api뿐만 아니라 product api, comment api 등 여러개 생기므로, 그냥 /register말고 /api/user/register로 specify 해준다.

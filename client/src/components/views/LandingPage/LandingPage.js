@@ -1,6 +1,12 @@
-import React from 'react'
+import React, {useEffect} from 'react';
+import axios from 'axios';
 
 function LandingPage(){
+    useEffect(() => {
+        axios.get('/api/hello')
+        .then((resFromServerIndexJs) => console.log(resFromServerIndexJs))
+    }, [])
+
     return (
         <div>
        랜딩페이지
