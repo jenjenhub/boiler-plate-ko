@@ -1,24 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import LandingPage from './components/views/LandingPage/LandingPage'
+import LoginPage from './components/views/LoginPage/LoginPage';
+import RegisterPage from './components/views/RegisterPage/RegisterPage';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          <code>Hello!</code>
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <BrowserRouter>
+
+      <div>
+      <ul>
+          <li>
+            <Link to="/">LandingPage</Link>
+          </li>
+          <li>
+            <Link to="/login">LoginPage</Link>
+          </li>
+          <li>
+            <Link to="/register">RegisterPage</Link>
+          </li>
+        </ul>
+
+        <hr />
+   
+        <Routes>
+          <Route exact={true} path={"/"} element={<LandingPage />} />
+          <Route exact={true} path={"/login"} element={<LoginPage />} />
+          <Route exact={true} path={"/register"} element={<RegisterPage />}/>
+        </Routes>
     </div>
+    </BrowserRouter>
   );
 }
 

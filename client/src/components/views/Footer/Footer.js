@@ -1,11 +1,11 @@
 import React from 'react'
 
-function LoginPage() {
+function Footer() {
     return (
         <div>
-        로그인 페이지
+            Footer
         </div>
     )
 }
 
-export default LoginPage
+export default Footer;
