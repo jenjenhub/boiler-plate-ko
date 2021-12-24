@@ -3,10 +3,10 @@ const app = express()
 const port = 4000
 const bodyParser = require ('body-parser')   //bodyParser로 인해서 req.body를 받을 수 있게 됨
 const cookieParser = require('cookie-parser')
-const config = require('./server/config/key')
+const config = require('./config/key')
 
-const { User }= require('./server/models/User')
-const { auth } = require('./server/middleware/auth')
+const { User }= require('./models/User')
+const { auth } = require('./middleware/auth')
 
 // application/x-www-form-urlencoded 이렇게 된 데이터를 분석해서 가져올 수 있게 해줌
 app.use(bodyParser.urlencoded({extended:true}));
@@ -31,6 +31,7 @@ app.get('/api/hello', (req, res) => {    //client와 응답 주고받음 (Landin
 app.post('/api/users/register', (req,res) => {     //나중에는 user api뿐만 아니라 product api, comment api 등 여러개 생기므로, 그냥 /register말고 /api/user/register로 specify 해준다.
     // 회원가입 : 회원가입할때 필요한 정보들을 client에서 가져오면 그것들을 db에 넣어준다.
    const user = new User (req.body)   // ! 이부분이 req.body를 User 모델에 넣은거라고 ?
+   console.log(`*******${user}*******`)
    user.save((err, userInfo)=>{         //save는 mongoDB method
        if(err) return res.json({success : false, err})
        return res.status(200).json({success : true})
