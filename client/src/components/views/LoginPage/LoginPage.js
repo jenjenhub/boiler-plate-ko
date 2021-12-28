@@ -2,9 +2,11 @@ import React from 'react'
 
 function LoginPage() {
     return (
-        <div>
-        로그인 페이지
-        </div>
+        <div style={{
+            display: 'flex', justifyContent: 'center', alignItems: 'center'
+            , width: '100%', height: '100vh'
+        }}>
+            </div>
     )
 }
 
