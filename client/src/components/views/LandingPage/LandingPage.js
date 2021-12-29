@@ -8,8 +8,8 @@ function LandingPage(){
     }, [])
 
     return (
-        <div>
-       랜딩페이지
+        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100vh'}}>
+       <h3>~~랜딩페이지~~</h3>
         </div>
     )
 }
