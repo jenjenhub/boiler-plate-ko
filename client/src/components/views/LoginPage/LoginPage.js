@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 
 function LoginPage(props) {
     const dispatch = useDispatch();
-    const history = useHistory();
+   // const history = useHistory();
 
     const [Email, setEmail]= useState('')
     const [Password, setPassword]= useState('')
@@ -30,7 +30,7 @@ function LoginPage(props) {
       // login 되면 Landingpage가 뜨게 해준다
       .then(response => {
           if(response.payload.loginSuccess){
-            history.push('/')    //react에서 페이지 이동시킬 때 쓰는 공식
+            props.history.push('/')    //react에서 페이지 이동시킬 때 쓰는 공식
           }else{
               alert('Error')
           }
@@ -52,6 +52,6 @@ function LoginPage(props) {
             </form>
             </div>
     )
-}
+};
 
 export default LoginPage
